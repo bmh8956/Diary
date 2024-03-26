@@ -24,7 +24,7 @@ export const DiaryDispatchContext = React.createContext();  // 이벤트를 처�
 //상태 값을 변경하는 reducer 함수 정의
 
 function App() {
-
+    const navigate  = useNavigate();
     // useRef Hook을 사용해서 고유한 값을 생성 : id 필드에 적용
     const idRef = useRef(3);
 
@@ -36,30 +36,27 @@ function App() {
 
     useEffect(() => {
         setList()
-    }, []);
+    }, [navigate]);
 
-    const onCreate = async (date, content, emotionId) => {
+    const onCreate = (date, content, emotionId) => {
         const diary = {
             date: new Date(date).getTime(),
             content: content,
             emotionId: emotionId
         }
-        await diaryService.saveDiary(diary);
-        await setList();
+        diaryService.saveDiary(diary);
     }
-    const onUpdate = async (id, date, emotionId, content) => {
+    const onUpdate = (id, date, emotionId, content) => {
         const diary = {
             id: id,
             date: new Date(date).getTime(),
             emotionId: emotionId,
             content: content,
         }
-        await diaryService.putDiary(diary);
-        await setList();
+        diaryService.putDiary(diary);
     }
-    const onDelete = async (targetId) => {
-        await diaryService.deleteDiary(targetId);
-        await setList();
+    const onDelete = (targetId) => {
+        diaryService.deleteDiary(targetId);
     }
 
     return (
